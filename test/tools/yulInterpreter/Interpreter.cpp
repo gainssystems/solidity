@@ -296,10 +296,7 @@ void Interpreter::incrementStep()
 void ExpressionEvaluator::operator()(Literal const& _literal)
 {
 	incrementStep();
-	static YulString const trueString("true");
-	static YulString const falseString("false");
-
-	setValue(valueOfLiteral(_literal));
+	setValue(_literal.value.value());
 }
 
 void ExpressionEvaluator::operator()(Identifier const& _identifier)
@@ -389,16 +386,10 @@ void ExpressionEvaluator::evaluateArgs(
 			visit(expr);
 		else
 		{
-			std::string literal = std::get<Literal>(expr).value.str();
-
-			try
-			{
-				m_values = {u256(literal)};
-			}
-			catch (std::exception&)
-			{
-				m_values = {u256(0)};
-			}
+			if (std::get<Literal>(expr).value.unlimited())
+				m_values = {0xdeadbeef};
+			else
+				m_values = {std::get<Literal>(expr).value.value()};
 		}
 
 		values.push_back(value());

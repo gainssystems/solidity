@@ -41,7 +41,6 @@
 
 #include <fmt/format.h>
 
-#include <memory>
 #include <functional>
 
 using namespace std::string_literals;
@@ -101,24 +100,37 @@ AsmAnalysisInfo AsmAnalyzer::analyzeStrictAssertCorrect(Dialect const& _dialect,
 std::vector<YulString> AsmAnalyzer::operator()(Literal const& _literal)
 {
 	expectValidType(_literal.type, nativeLocationOf(_literal));
-	if (_literal.kind == LiteralKind::String && _literal.value.str().size() > 32)
+	bool erroneousLiteral = false;
+	if (_literal.kind == LiteralKind::String && !_literal.value.unlimited() && _literal.value.hint() && _literal.value.hint()->size() > 32)
+	{
+		erroneousLiteral = true;
 		m_errorReporter.typeError(
 			3069_error,
 			nativeLocationOf(_literal),
-			"String literal too long (" + std::to_string(_literal.value.str().size()) + " > 32)"
-		);
-	else if (_literal.kind == LiteralKind::Number && bigint(_literal.value.str()) > u256(-1))
+			"String literal too long (" + std::to_string(formatLiteral(_literal, false).size()) + " > 32)");
+	}
+	else if (_literal.kind == LiteralKind::Number && _literal.value.hint() && bigint(*_literal.value.hint()) > u256(-1))
+	{
+		erroneousLiteral = true;
 		m_errorReporter.typeError(6708_error, nativeLocationOf(_literal), "Number literal too large (> 256 bits)");
+	}
 	else if (_literal.kind == LiteralKind::Boolean)
-		yulAssert(_literal.value == "true"_yulstring || _literal.value == "false"_yulstring, "");
+	{
+		yulAssert(_literal.value.value() == true || _literal.value.value() == false);
+		if (_literal.value.hint())
+			yulAssert(*_literal.value.hint() == "true" || *_literal.value.hint() == "false");
+	}
 
 	if (!m_dialect.validTypeForLiteral(_literal.kind, _literal.value, _literal.type))
+	{
+		erroneousLiteral = true;
 		m_errorReporter.typeError(
 			5170_error,
 			nativeLocationOf(_literal),
-			"Invalid type \"" + _literal.type.str() + "\" for literal \"" + _literal.value.str() + "\"."
-		);
+			"Invalid type \"" + _literal.type.str() + "\" for literal \"" + formatLiteral(_literal, false) + "\".");
+	}
 
+	yulAssert(erroneousLiteral || validLiteral(_literal), "Invalid literal after validating it through AsmAnalyzer.");
 	return {_literal.type};
 }
 
@@ -417,23 +429,25 @@ std::vector<YulString> AsmAnalyzer::operator()(FunctionCall const& _funCall)
 				std::string functionName = _funCall.functionName.name.str();
 				if (functionName == "datasize" || functionName == "dataoffset")
 				{
-					if (!m_dataNames.count(std::get<Literal>(arg).value))
+					auto const& argumentAsLiteral = std::get<Literal>(arg);
+					if (!m_dataNames.count(YulString(formatLiteral(argumentAsLiteral))))
 						m_errorReporter.typeError(
 							3517_error,
 							nativeLocationOf(arg),
-							"Unknown data object \"" + std::get<Literal>(arg).value.str() + "\"."
+							"Unknown data object \"" + formatLiteral(argumentAsLiteral) + "\"."
 						);
 				}
 				else if (functionName.substr(0, "verbatim_"s.size()) == "verbatim_")
 				{
-					if (std::get<Literal>(arg).value.empty())
+					static u256 const empty {valueOfStringLiteral("").value()};
+					auto const& literalValue = std::get<Literal>(arg).value;
+					if ((literalValue.unlimited() && literalValue.builtinStringLiteralValue().empty()) || (!literalValue.unlimited() && literalValue.value() == empty))
 						m_errorReporter.typeError(
 							1844_error,
 							nativeLocationOf(arg),
 							"The \"verbatim_*\" builtins cannot be used with empty bytecode."
 						);
 				}
-
 				argTypes.emplace_back(expectUnlimitedStringLiteral(std::get<Literal>(arg)));
 				continue;
 			}
@@ -492,12 +506,12 @@ void AsmAnalyzer::operator()(Switch const& _switch)
 			(*this)(*_case.value);
 
 			/// Note: the parser ensures there is only one default case
-			if (watcher.ok() && !cases.insert(valueOfLiteral(*_case.value)).second)
+			if (watcher.ok() && !cases.insert(_case.value->value.value()).second)
 				m_errorReporter.declarationError(
 					6792_error,
 					nativeLocationOf(_case),
 					"Duplicate case \"" +
-					valueOfLiteral(*_case.value).str() +
+					formatLiteral(*_case.value) +
 					"\" defined."
 				);
 		}
@@ -557,8 +571,9 @@ YulString AsmAnalyzer::expectExpression(Expression const& _expr)
 
 YulString AsmAnalyzer::expectUnlimitedStringLiteral(Literal const& _literal)
 {
-	yulAssert(_literal.kind == LiteralKind::String, "");
-	yulAssert(m_dialect.validTypeForLiteral(LiteralKind::String, _literal.value, _literal.type), "");
+	yulAssert(_literal.kind == LiteralKind::String);
+	yulAssert(m_dialect.validTypeForLiteral(LiteralKind::String, _literal.value, _literal.type));
+	yulAssert(_literal.value.unlimited());
 
 	return {_literal.type};
 }

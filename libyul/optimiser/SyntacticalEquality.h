@@ -34,6 +34,7 @@ namespace solidity::yul
 /**
  * Component that can compare ASTs for equality on a syntactic basis.
  * Ignores source locations and allows for different variable names but requires exact matches otherwise.
+ * Literals are compared based on their values, e.g., 0x01 and 1 evaluate as equal.
  *
  * Prerequisite: Disambiguator (unless only expressions are compared)
  */
