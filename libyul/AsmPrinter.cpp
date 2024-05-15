@@ -35,6 +35,7 @@
 
 #include <range/v3/view/transform.hpp>
 
+#include <memory>
 #include <functional>
 #include <memory>
 
