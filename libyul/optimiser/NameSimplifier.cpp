@@ -28,7 +28,7 @@
 #include <regex>
 
 using namespace solidity::yul;
-
+/*
 NameSimplifier::NameSimplifier(OptimiserStepContext& _context, Block const& _ast):
 	m_context(_context)
 {
@@ -120,3 +120,4 @@ void NameSimplifier::translate(YulString& _name)
 	if (it != m_translations.end())
 		_name = it->second;
 }
+*/

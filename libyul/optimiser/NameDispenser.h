@@ -19,7 +19,6 @@
  * Optimiser component that can create new unique names.
  */
 #pragma once
-
 #include <libyul/ASTForward.h>
 
 #include <libyul/YulString.h>
@@ -36,6 +35,7 @@ struct Dialect;
  *
  * Tries to keep names short and appends decimals to disambiguate.
  */
+/*
 class NameDispenser
 {
 public:
@@ -66,5 +66,5 @@ private:
 	std::set<YulString> m_reservedNames;
 	size_t m_counter = 0;
 };
-
+*/
 }

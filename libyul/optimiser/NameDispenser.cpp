@@ -32,7 +32,7 @@
 using namespace solidity;
 using namespace solidity::yul;
 using namespace solidity::util;
-
+/*
 NameDispenser::NameDispenser(Dialect const& _dialect, Block const& _ast, std::set<YulString> _reservedNames):
 	NameDispenser(_dialect, NameCollector(_ast).names() + _reservedNames)
 {
@@ -67,3 +67,4 @@ void NameDispenser::reset(Block const& _ast)
 	m_usedNames = NameCollector(_ast).names() + m_reservedNames;
 	m_counter = 0;
 }
+*/

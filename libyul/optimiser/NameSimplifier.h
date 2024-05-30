@@ -41,6 +41,7 @@ struct Dialect;
  *
  * Prerequisites: Disambiguator, FunctionHoister, FunctionGrouper
  */
+ /*
 class NameSimplifier: public ASTModifier
 {
 public:
@@ -68,5 +69,5 @@ private:
 	OptimiserStepContext& m_context;
 	std::map<YulString, YulString> m_translations;
 };
-
+*/
 }

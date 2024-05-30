@@ -55,7 +55,7 @@ void FunctionSpecializer::operator()(FunctionCall& _f)
 
 	// TODO When backtracking is implemented, the restriction of recursive functions can be lifted.
 	if (
-		m_dialect.builtin(_f.functionName.name) ||
+		m_yulNameRepository.isBuiltinName(_f.functionName.name) ||
 		m_recursiveFunctions.count(_f.functionName.name)
 	)
 		return;
@@ -64,8 +64,8 @@ void FunctionSpecializer::operator()(FunctionCall& _f)
 
 	if (ranges::any_of(arguments, [](auto& _a) { return _a.has_value(); }))
 	{
-		YulString oldName = std::move(_f.functionName.name);
-		auto newName = m_nameDispenser.newName(oldName);
+		auto oldName = std::move(_f.functionName.name);
+		auto newName = m_yulNameRepository.deriveName(oldName);
 
 		m_oldToNewMap[oldName].emplace_back(std::make_pair(newName, arguments));
 
@@ -79,19 +79,19 @@ void FunctionSpecializer::operator()(FunctionCall& _f)
 
 FunctionDefinition FunctionSpecializer::specialize(
 	FunctionDefinition const& _f,
-	YulString _newName,
+	YulName _newName,
 	FunctionSpecializer::LiteralArguments _arguments
 )
 {
 	yulAssert(_arguments.size() == _f.parameters.size(), "");
 
-	std::map<YulString, YulString> translatedNames = applyMap(
+	std::map<YulName, YulName> translatedNames = applyMap(
 		NameCollector{_f, NameCollector::OnlyVariables}.names(),
-		[&](auto& _name) -> std::pair<YulString, YulString>
+		[&](auto& _name) -> std::pair<YulName, YulName>
 		{
-			return std::make_pair(_name, m_nameDispenser.newName(_name));
+			return std::make_pair(_name, m_yulNameRepository.deriveName(_name));
 		},
-		std::map<YulString, YulString>{}
+		std::map<YulName, YulName>{}
 	);
 
 	FunctionDefinition newFunction = std::get<FunctionDefinition>(FunctionCopier{translatedNames}(_f));
@@ -119,7 +119,7 @@ FunctionDefinition FunctionSpecializer::specialize(
 			applyMap(_arguments, [&](auto const& _v) { return !_v; })
 		);
 
-	newFunction.name = std::move(_newName);
+	newFunction.name = _newName;
 
 	return newFunction;
 }
@@ -128,7 +128,7 @@ void FunctionSpecializer::run(OptimiserStepContext& _context, Block& _ast)
 {
 	FunctionSpecializer f{
 		CallGraphGenerator::callGraph(_ast).recursiveFunctions(),
-		_context.dispenser,
+		_context.yulNameRepository,
 		_context.dialect
 	};
 	f(_ast);

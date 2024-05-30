@@ -56,7 +56,7 @@ void BlockHasher::operator()(Literal const& _literal)
 		hash64(std::hash<u256>{}(_literal.value.value()));
 	else
 		hash64(std::hash<std::string>{}(_literal.value.builtinStringLiteralValue()));
-	hash64(_literal.type.hash());
+	hash64(_literal.type);
 	hash8(static_cast<uint8_t>(_literal.kind));
 }
 
@@ -82,7 +82,7 @@ void BlockHasher::operator()(Identifier const& _identifier)
 void BlockHasher::operator()(FunctionCall const& _funCall)
 {
 	hash64(compileTimeLiteralHash("FunctionCall"));
-	hash64(_funCall.functionName.name.hash());
+	hash64(_funCall.functionName.name);
 	hash64(_funCall.arguments.size());
 	ASTWalker::operator()(_funCall);
 }
@@ -208,20 +208,20 @@ void ExpressionHasher::operator()(Literal const& _literal)
 		hash64(std::hash<u256>{}(_literal.value.value()));
 	else
 		hash64(std::hash<std::string>{}(_literal.value.builtinStringLiteralValue()));
-	hash64(_literal.type.hash());
+	hash64(_literal.type);
 	hash8(static_cast<uint8_t>(_literal.kind));
 }
 
 void ExpressionHasher::operator()(Identifier const& _identifier)
 {
 	hash64(compileTimeLiteralHash("Identifier"));
-	hash64(_identifier.name.hash());
+	hash64(_identifier.name);
 }
 
 void ExpressionHasher::operator()(FunctionCall const& _funCall)
 {
 	hash64(compileTimeLiteralHash("FunctionCall"));
-	hash64(_funCall.functionName.name.hash());
+	hash64(_funCall.functionName.name);
 	hash64(_funCall.arguments.size());
 	ASTWalker::operator()(_funCall);
 }

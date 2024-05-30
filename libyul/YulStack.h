@@ -50,6 +50,7 @@ class Scanner;
 namespace solidity::yul
 {
 class AbstractAssembly;
+class EVMDialect;
 
 
 struct MachineAssemblyObject
@@ -84,14 +85,7 @@ public:
 		Language _language,
 		solidity::frontend::OptimiserSettings _optimiserSettings,
 		langutil::DebugInfoSelection const& _debugInfoSelection
-	):
-		m_language(_language),
-		m_evmVersion(_evmVersion),
-		m_eofVersion(_eofVersion),
-		m_optimiserSettings(std::move(_optimiserSettings)),
-		m_debugInfoSelection(_debugInfoSelection),
-		m_errorReporter(m_errors)
-	{}
+	);
 
 	/// @returns the char stream used during parsing
 	langutil::CharStream const& charStream(std::string const& _sourceName) const override;
@@ -105,7 +99,7 @@ public:
 	void optimize();
 
 	/// Run the assembly step (should only be called after parseAndAnalyze).
-	MachineAssemblyObject assemble(Machine _machine) const;
+	MachineAssemblyObject assemble(Machine _machine);
 
 	/// Run the assembly step (should only be called after parseAndAnalyze).
 	/// In addition to the value returned by @a assemble, returns
@@ -114,7 +108,7 @@ public:
 	std::pair<MachineAssemblyObject, MachineAssemblyObject>
 	assembleWithDeployed(
 		std::optional<std::string_view> _deployName = {}
-	) const;
+	);
 
 	/// Run the assembly step (should only be called after parseAndAnalyze).
 	/// Similar to @a assemblyWithDeployed, but returns EVM assembly objects.
@@ -122,7 +116,7 @@ public:
 	std::pair<std::shared_ptr<evmasm::Assembly>, std::shared_ptr<evmasm::Assembly>>
 	assembleEVMWithDeployed(
 		std::optional<std::string_view> _deployName = {}
-	) const;
+	);
 
 	/// @returns the errors generated during parsing, analysis (and potentially assembly).
 	langutil::ErrorList const& errors() const { return m_errors; }
@@ -135,13 +129,17 @@ public:
 	/// Return the parsed and analyzed object.
 	std::shared_ptr<Object> parserResult() const;
 
+	std::shared_ptr<YulNameRepository> const yulNameRepository() const;
+
 private:
 	bool analyzeParsed();
 	bool analyzeParsed(yul::Object& _object);
 
-	void compileEVM(yul::AbstractAssembly& _assembly, bool _optimize) const;
+	void compileEVM(yul::AbstractAssembly& _assembly, bool _optimize);
 
 	void optimize(yul::Object& _object, bool _isCreation);
+
+	std::shared_ptr<YulNameRepository> m_yulNameRepository;
 
 	Language m_language = Language::Assembly;
 	langutil::EVMVersion m_evmVersion;

@@ -40,14 +40,13 @@ class Disambiguator: public ASTCopier
 {
 public:
 	explicit Disambiguator(
-		Dialect const& _dialect,
+		YulNameRepository& _yulNameRepository,
 		AsmAnalysisInfo const& _analysisInfo,
-		std::set<YulString> const& _externallyUsedIdentifiers = {}
+		std::set<YulName> const& _externallyUsedIdentifiers = {}
 	):
 		m_info(_analysisInfo),
-		m_dialect(_dialect),
-		m_externallyUsedIdentifiers(_externallyUsedIdentifiers),
-		m_nameDispenser(_dialect, m_externallyUsedIdentifiers)
+		m_yulNameRepository(_yulNameRepository),
+		m_externallyUsedIdentifiers(_externallyUsedIdentifiers)
 	{
 	}
 
@@ -56,18 +55,17 @@ protected:
 	void leaveScope(Block const& _block) override;
 	void enterFunction(FunctionDefinition const& _function) override;
 	void leaveFunction(FunctionDefinition const& _function) override;
-	YulString translateIdentifier(YulString _name) override;
+	YulName translateIdentifier(YulName _name) override;
 
 	void enterScopeInternal(Scope& _scope);
 	void leaveScopeInternal(Scope& _scope);
 
 	AsmAnalysisInfo const& m_info;
-	Dialect const& m_dialect;
-	std::set<YulString> const& m_externallyUsedIdentifiers;
+	YulNameRepository& m_yulNameRepository;
+	std::set<YulName> const& m_externallyUsedIdentifiers;
 
 	std::vector<Scope*> m_scopes;
-	std::map<void const*, YulString> m_translations;
-	NameDispenser m_nameDispenser;
+	std::map<void const*, YulName> m_translations;
 };
 
 }

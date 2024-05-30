@@ -71,11 +71,11 @@ public:
 private:
 	explicit ExpressionSplitter(
 		Dialect const& _dialect,
-		NameDispenser& _nameDispenser,
+		YulNameRepository& _yulNameRepository,
 		TypeInfo& _typeInfo
 	):
 		m_dialect(_dialect),
-		m_nameDispenser(_nameDispenser),
+		m_yulNameRepository(_yulNameRepository),
 		m_typeInfo(_typeInfo)
 	{ }
 
@@ -88,7 +88,7 @@ private:
 	/// at the statement level.
 	std::vector<Statement> m_statementsToPrefix;
 	Dialect const& m_dialect;
-	NameDispenser& m_nameDispenser;
+	YulNameRepository& m_yulNameRepository;
 	TypeInfo& m_typeInfo;
 };
 
