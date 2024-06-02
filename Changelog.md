@@ -1,6 +1,7 @@
 ### 0.8.27 (unreleased)
 
 Language Features:
+ * Make ``require(bool, Error)`` available when using the legacy pipeline.
 
 
 Compiler Features:
