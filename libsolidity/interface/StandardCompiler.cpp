@@ -1371,15 +1371,6 @@ Json StandardCompiler::compileSolidity(StandardCompiler::InputsAndSettings _inpu
 			"Uncaught error: "
 		));
 	}
-	/// This should not be leaked from compile().
-	catch (FatalError const& _exception)
-	{
-		errors.emplace_back(formatError(
-			Error::Type::FatalError,
-			"general",
-			"Uncaught fatal error: " + boost::diagnostic_information(_exception)
-		));
-	}
 	catch (CompilerError const& _exception)
 	{
 		errors.emplace_back(formatErrorWithException(
@@ -1428,22 +1419,6 @@ Json StandardCompiler::compileSolidity(StandardCompiler::InputsAndSettings _inpu
 			Error::Type::SMTLogicException,
 			"general",
 			"SMT logic exception"
-		));
-	}
-	catch (util::Exception const& _exception)
-	{
-		errors.emplace_back(formatError(
-			Error::Type::Exception,
-			"general",
-			"Exception during compilation: " + boost::diagnostic_information(_exception)
-		));
-	}
-	catch (std::exception const& _exception)
-	{
-		errors.emplace_back(formatError(
-			Error::Type::Exception,
-			"general",
-			"Unknown exception during compilation: " + boost::diagnostic_information(_exception)
 		));
 	}
 	catch (...)
@@ -1758,34 +1733,6 @@ Json StandardCompiler::compile(Json const& _input) noexcept
 			return importEVMAssembly(std::move(settings));
 		else
 			return formatFatalError(Error::Type::JSONError, "Only \"Solidity\", \"Yul\", \"SolidityAST\" or \"EVMAssembly\" is supported as a language.");
-	}
-	catch (Json::parse_error const& _exception)
-	{
-		return formatFatalError(Error::Type::InternalCompilerError, std::string("JSON parse_error exception: ") + util::removeNlohmannInternalErrorIdentifier(_exception.what()));
-	}
-	catch (Json::invalid_iterator const& _exception)
-	{
-		return formatFatalError(Error::Type::InternalCompilerError, std::string("JSON invalid_iterator exception: ") + util::removeNlohmannInternalErrorIdentifier(_exception.what()));
-	}
-	catch (Json::type_error const& _exception)
-	{
-		return formatFatalError(Error::Type::InternalCompilerError, std::string("JSON type_error exception: ") + util::removeNlohmannInternalErrorIdentifier(_exception.what()));
-	}
-	catch (Json::out_of_range const& _exception)
-	{
-		return formatFatalError(Error::Type::InternalCompilerError, std::string("JSON out_of_range exception: ") + util::removeNlohmannInternalErrorIdentifier(_exception.what()));
-	}
-	catch (Json::other_error const& _exception)
-	{
-		return formatFatalError(Error::Type::InternalCompilerError, std::string("JSON other_error exception: ") + util::removeNlohmannInternalErrorIdentifier(_exception.what()));
-	}
-	catch (Json::exception const& _exception)
-	{
-		return formatFatalError(Error::Type::InternalCompilerError, std::string("JSON runtime exception: ") + util::removeNlohmannInternalErrorIdentifier(_exception.what()));
-	}
-	catch (util::Exception const& _exception)
-	{
-		return formatFatalError(Error::Type::InternalCompilerError, "Internal exception in StandardCompiler::compile: " + boost::diagnostic_information(_exception));
 	}
 	catch (...)
 	{
