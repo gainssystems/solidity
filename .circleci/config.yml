@@ -315,6 +315,7 @@ commands:
   soltest:
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       # NOTE: Different build jobs produce different soltest executables (release/debug,
@@ -329,6 +330,7 @@ commands:
   test_lsp:
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run:
@@ -339,6 +341,7 @@ commands:
   build:
     steps:
       - checkout
+      - run: git submodule update --init
       - run_build
       - store_artifacts_solc
       - store_artifacts_yul_phaser
@@ -348,6 +351,7 @@ commands:
   soltest_all:
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run_soltest_all
@@ -359,6 +363,7 @@ commands:
   cmdline_tests:
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run_cmdline_tests
@@ -856,6 +861,7 @@ jobs:
     <<: *base_python_small
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run:
@@ -866,7 +872,7 @@ jobs:
           name: Check spelling
           command: |
             ~/.local/bin/codespell \
-              --skip "*.enc,.git,Dockerfile*,LICENSE,codespell_whitelist.txt,codespell_ignored_lines.txt" \
+              --skip "*.enc,.git,Dockerfile*,LICENSE,codespell_whitelist.txt,codespell_ignored_lines.txt,deps" \
               --ignore-words scripts/codespell_whitelist.txt \
               --exclude-file scripts/codespell_ignored_lines.txt
       - matrix_notify_failure_unless_pr
@@ -875,6 +881,7 @@ jobs:
     <<: *base_node_small
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run:
@@ -889,6 +896,7 @@ jobs:
     <<: *base_cimg_small
     steps:
       - checkout
+      - run: git submodule update --init
       - run:
           name: Install shellcheck
           command: |
@@ -909,6 +917,7 @@ jobs:
     <<: *base_python_small
     steps:
       - checkout
+      - run: git submodule update --init
       - run:
           name: Check for error codes
           command: scripts/error_codes.py --check
@@ -918,6 +927,7 @@ jobs:
     <<: *base_ubuntu2204_small
     steps:
       - checkout
+      - run: git submodule update --init
       - run: pylint --version
       - run:
           name: Linting Python Scripts
@@ -928,6 +938,7 @@ jobs:
     <<: *base_cimg_small
     steps:
       - checkout
+      - run: git submodule update --init
       - run:
           name: Install Java
           command: |
@@ -942,6 +953,7 @@ jobs:
     <<: *base_node_small
     steps:
       - checkout
+      - run: git submodule update --init
       - run:
           name: JS deps
           command: |
@@ -957,6 +969,7 @@ jobs:
     <<: *base_ubuntu2204_small
     steps:
       - checkout
+      - run: git submodule update --init
       - run_proofs
       - matrix_notify_failure_unless_pr
 
@@ -964,6 +977,7 @@ jobs:
     <<: *base_ubuntu2204_small
     steps:
       - checkout
+      - run: git submodule update --init
       - run_docs_pragma_min_version
       - matrix_notify_failure_unless_pr
 
@@ -971,6 +985,7 @@ jobs:
     <<: *base_ubuntu2204_small
     steps:
       - checkout
+      - run: git submodule update --init
       - run:
           name: Python unit tests
           command: python3 test/pyscriptTests.py
@@ -984,6 +999,7 @@ jobs:
     steps:
       - run: git config --global core.autocrlf false
       - checkout
+      - run: git submodule update --init
       - run:
           name: Install dependencies
           command: python -m pip install --user requests parsec tabulate
@@ -1047,6 +1063,7 @@ jobs:
       CMAKE_OPTIONS: -DCMAKE_BUILD_TYPE=Release -DUSE_Z3_DLOPEN=ON -DSOLC_STATIC_STDLIBS=ON
     steps:
       - checkout
+      - run: git submodule update --init
       - run_build
       - run:
           name: strip binary
@@ -1070,6 +1087,7 @@ jobs:
       CMAKE_BUILD_TYPE: Debug
     steps:
       - checkout
+      - run: git submodule update --init
       - run_build
       - persist_executables_to_workspace
       - matrix_notify_failure_unless_pr
@@ -1082,6 +1100,7 @@ jobs:
       OPTIMIZE: 1
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run:
@@ -1108,6 +1127,7 @@ jobs:
       MAKEFLAGS: -j 10
     steps:
       - checkout
+      - run: git submodule update --init
       - run_build
       - matrix_notify_failure_unless_pr
 
@@ -1115,6 +1135,7 @@ jobs:
     <<: *base_ubuntu_clang
     steps:
       - checkout
+      - run: git submodule update --init
       - setup_prerelease_commit_hash
       - run_build_ossfuzz
       - persist_ossfuzz_executables_to_workspace
@@ -1124,6 +1145,7 @@ jobs:
     <<: *base_ubuntu_clang_small
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run:
@@ -1148,6 +1170,7 @@ jobs:
           command: |
             pacman --noconfirm -Syu --noprogressbar --needed base-devel boost cmake git openssh tar
       - checkout
+      - run: git submodule update --init
       - run_build
       - store_artifacts_solc
       - persist_executables_to_workspace
@@ -1161,6 +1184,7 @@ jobs:
       CMAKE_OPTIONS: -DCMAKE_OSX_ARCHITECTURES:STRING=x86_64;arm64
     steps:
       - checkout
+      - run: git submodule update --init
       - install_dependencies_osx
       - run_build
       - store_artifacts_solc
@@ -1176,6 +1200,7 @@ jobs:
       OPTIMIZE: 0
     steps:
       - checkout
+      - run: git submodule update --init
       - install_dependencies_osx
       - attach_workspace:
           at: .
@@ -1190,6 +1215,7 @@ jobs:
     parallelism: 8 # Should match number of tests in .circleci/parallel_cli_tests.py
     steps:
       - checkout
+      - run: git submodule update --init
       - install_dependencies_osx
       - attach_workspace:
           at: .
@@ -1204,6 +1230,7 @@ jobs:
       MAKEFLAGS: -j 10
     steps:
       - checkout
+      - run: git submodule update --init
       - run:
           name: Build
           command: |
@@ -1225,6 +1252,7 @@ jobs:
     <<: *base_ubuntu2204_small
     steps:
       - checkout
+      - run: git submodule update --init
       - setup_prerelease_commit_hash
       - run:
           name: Build documentation
@@ -1245,6 +1273,7 @@ jobs:
     parallelism: 50
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run_soltest_all:
@@ -1273,7 +1302,7 @@ jobs:
       - run:
           name: Install runtime dependencies
           command: |
-            pacman --noconfirm -Syu --noprogressbar --needed z3
+            pacman --noconfirm -Syu --noprogressbar --needed z3 git
       - soltest
 
   t_ubu_clang_soltest: &t_ubu_clang_soltest
@@ -1307,6 +1336,7 @@ jobs:
     <<: *base_ubuntu2204_small
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run: test/localeTest.sh build/solc/solc
@@ -1373,6 +1403,7 @@ jobs:
     <<: *base_ubuntu2204
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: /tmp/workspace
       - run:
@@ -1398,6 +1429,7 @@ jobs:
       HARDHAT_TESTS_SOLC_PATH: /tmp/workspace/soljson.js
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: /tmp/workspace
       - run:
@@ -1473,6 +1505,7 @@ jobs:
       COMPILE_ONLY: << parameters.compile_only >>
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: /tmp/workspace
       - install_foundry
@@ -1525,6 +1558,7 @@ jobs:
       - install_python3:
           packages: requests
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: .
       - run:
@@ -1600,6 +1634,7 @@ jobs:
     steps:
       # NOTE: Not disabling git's core.autocrlf here because we want to build using the typical Windows config.
       - checkout
+      - run: git submodule update --init
       - restore_cache:
           keys:
             - dependencies-win-{{ arch }}-{{ checksum "scripts/install_deps.ps1" }}
@@ -1636,6 +1671,7 @@ jobs:
       # NOTE: Git's default core.autocrlf is fine for running soltest. We get additional coverage
       # for files using CRLF that way.
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - run:
@@ -1669,6 +1705,7 @@ jobs:
     parallelism: 2 # For prepare_bytecode_report
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - prepare_bytecode_report:
@@ -1685,6 +1722,7 @@ jobs:
     parallelism: 2 # For prepare_bytecode_report
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: build
       - prepare_bytecode_report:
@@ -1701,6 +1739,7 @@ jobs:
     parallelism: 2 # For prepare_bytecode_report
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: .
       - prepare_bytecode_report:
@@ -1717,6 +1756,7 @@ jobs:
     parallelism: 2 # For prepare_bytecode_report
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: .
       - prepare_bytecode_report:
@@ -1736,6 +1776,7 @@ jobs:
       # platforms so line ending conversions must absolutely be disabled.
       - run: git config --global core.autocrlf false
       - checkout
+      - run: git submodule update --init
       - run:
           name: Force install python3.12
           command: choco install python312 --pre --force
@@ -1757,6 +1798,7 @@ jobs:
     <<: *base_node_small
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: emscripten_build/libsolc
       - prepare_bytecode_report:
@@ -1772,6 +1814,7 @@ jobs:
       <<: *bytecode_compare_env_presets
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: .
       - run: .circleci/compare_bytecode_reports.sh $PRESETS
@@ -1785,6 +1828,7 @@ jobs:
     <<: *base_ubuntu2204
     steps:
       - checkout
+      - run: git submodule update --init
       - attach_workspace:
           at: workspace
       - run:
