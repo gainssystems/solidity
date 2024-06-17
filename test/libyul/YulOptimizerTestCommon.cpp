@@ -83,7 +83,10 @@ YulOptimizerTestCommon::YulOptimizerTestCommon(
 	m_analysisInfo = m_object->analysisInfo;
 
 	m_namedSteps = {
-		{"disambiguator", [&]() { disambiguate(); }},
+		{"disambiguator", [&]() {
+			 disambiguate();
+			 m_context->yulNameRepository.generateLabels(*m_ast);
+		}},
 		{"nameDisplacer", [&]() {
 			disambiguate();
 			NameDisplacer{
