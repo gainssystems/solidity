@@ -198,7 +198,7 @@ std::optional<std::pair<std::string_view, SourceLocation>> Parser::parseSrcComme
 		std::regex_constants::ECMAScript | std::regex_constants::optimize
 	);
 	std::match_results<std::string_view::const_iterator> match;
-	if (!regex_search(_arguments.cbegin(), _arguments.cend(), match, argsRegex))
+	if (!std::regex_search(_arguments.cbegin(), _arguments.cend(), match, argsRegex))
 	{
 		m_errorReporter.syntaxError(
 			8387_error,
