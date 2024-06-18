@@ -7,6 +7,7 @@ Compiler Features:
  * Error Reporting: Unimplemented features are now properly reported as errors instead of being handled as if they were bugs.
  * EVM: Support for the EVM version "Prague".
  * SMTChecker: Add CHC engine check for underflow and overflow in unary minus operation.
+ * SMTChecker: Eldarica is now required in addition to Z3 in order for all of the SMT tests to pass.
  * SMTChecker: Replace CVC4 as a possible BMC backend with cvc5.
 
 
