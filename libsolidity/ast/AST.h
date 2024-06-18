@@ -1571,7 +1571,7 @@ public:
 		ASTPointer<std::vector<ASTPointer<ASTString>>> _flags,
 		std::shared_ptr<yul::Block> _operations
 	);
-	~InlineAssembly();
+	~InlineAssembly() override;
 	void accept(ASTVisitor& _visitor) override;
 	void accept(ASTConstVisitor& _visitor) const override;
 

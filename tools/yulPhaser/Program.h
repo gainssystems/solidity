@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <libyul/optimiser/NameDispenser.h>
 #include <libyul/AST.h>
 
 #include <liblangutil/Exceptions.h>

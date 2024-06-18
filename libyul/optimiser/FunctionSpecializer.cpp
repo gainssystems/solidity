@@ -21,10 +21,8 @@
 #include <libyul/optimiser/ASTCopier.h>
 #include <libyul/optimiser/CallGraphGenerator.h>
 #include <libyul/optimiser/NameCollector.h>
-#include <libyul/optimiser/NameDispenser.h>
 
 #include <libyul/AST.h>
-#include <libyul/YulString.h>
 #include <libsolutil/CommonData.h>
 
 #include <range/v3/algorithm/any_of.hpp>
@@ -128,8 +126,7 @@ void FunctionSpecializer::run(OptimiserStepContext& _context, Block& _ast)
 {
 	FunctionSpecializer f{
 		CallGraphGenerator::callGraph(_ast).recursiveFunctions(),
-		_context.yulNameRepository,
-		_context.dialect
+		_context.yulNameRepository
 	};
 	f(_ast);
 

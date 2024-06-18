@@ -43,12 +43,6 @@
 using namespace solidity;
 using namespace solidity::yul;
 
-/// Variable names for special constants that can never appear in actual Yul code.
-static constexpr auto zero = std::string_view("@ 0");
-static constexpr auto one = std::string_view("@ 1");
-static constexpr auto thirtyTwo = std::string_view("@ 32");
-
-
 void UnusedStoreEliminator::run(OptimiserStepContext& _context, Block& _ast)
 {
 	std::map<YulName, SideEffects> functionSideEffects = SideEffectsPropagator::sideEffects(

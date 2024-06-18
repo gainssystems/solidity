@@ -18,7 +18,6 @@
 #include <libyul/optimiser/StackLimitEvader.h>
 #include <libyul/optimiser/CallGraphGenerator.h>
 #include <libyul/optimiser/FunctionCallFinder.h>
-#include <libyul/optimiser/NameDispenser.h>
 #include <libyul/optimiser/NameCollector.h>
 #include <libyul/optimiser/StackToMemoryMover.h>
 #include <libyul/backends/evm/ControlFlowGraphBuilder.h>

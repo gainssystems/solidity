@@ -25,7 +25,6 @@
 #include <libyul/optimiser/OptimiserStep.h>
 #include <libyul/optimiser/NameCollector.h>
 #include <libyul/optimiser/NameDisplacer.h>
-#include <libyul/optimiser/NameDispenser.h>
 #include <libyul/YulString.h>
 #include <libyul/AST.h>
 

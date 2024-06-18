@@ -22,7 +22,6 @@
 #pragma once
 
 #include <libyul/optimiser/ASTWalker.h>
-#include <libyul/optimiser/NameDispenser.h>
 
 #include <set>
 #include <map>

@@ -18,7 +18,6 @@
 #pragma once
 
 #include <libyul/optimiser/Metrics.h>
-#include <libyul/optimiser/NameDispenser.h>
 
 #include <libyul/AST.h>
 

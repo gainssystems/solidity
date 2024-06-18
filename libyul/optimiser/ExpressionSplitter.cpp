@@ -38,7 +38,7 @@ using namespace solidity::langutil;
 void ExpressionSplitter::run(OptimiserStepContext& _context, Block& _ast)
 {
 	TypeInfo typeInfo(_context.yulNameRepository, _ast);
-	ExpressionSplitter{_context.dialect, _context.yulNameRepository, typeInfo}(_ast);
+	ExpressionSplitter{_context.yulNameRepository, typeInfo}(_ast);
 }
 
 void ExpressionSplitter::operator()(FunctionCall& _funCall)

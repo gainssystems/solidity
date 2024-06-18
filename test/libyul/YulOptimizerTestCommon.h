@@ -19,7 +19,6 @@
 #pragma once
 
 #include <libyul/optimiser/OptimiserStep.h>
-#include <libyul/optimiser/NameDispenser.h>
 
 #include <libyul/YulString.h>
 

@@ -67,12 +67,10 @@ public:
 private:
 	explicit FunctionSpecializer(
 		std::set<YulName> _recursiveFunctions,
-		YulNameRepository& _yulNameRepository,
-		Dialect const& _dialect
+		YulNameRepository& _yulNameRepository
 	):
 		m_recursiveFunctions(std::move(_recursiveFunctions)),
-		m_yulNameRepository(_yulNameRepository),
-		m_dialect(_dialect)
+		m_yulNameRepository(_yulNameRepository)
 	{}
 	/// Returns a vector of Expressions, where the index `i` is an expression if the function's
 	/// `i`-th argument can be specialized, nullopt otherwise.
@@ -106,7 +104,6 @@ private:
 	std::set<YulName> const m_recursiveFunctions;
 
 	YulNameRepository& m_yulNameRepository;
-	Dialect const& m_dialect;
 };
 
 }
