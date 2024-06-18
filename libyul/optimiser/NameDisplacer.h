@@ -39,7 +39,7 @@ struct Dialect;
  *
  * Prerequisites: Disambiguator
  */
- class NameDisplacer: public ASTModifier
+class NameDisplacer: public ASTModifier
 {
 public:
 	explicit NameDisplacer(
@@ -47,11 +47,8 @@ public:
 		YulNameRepository& _yulNameRepository
 	):
 		m_namesToFree(_namesToFree),
-	    m_yulNameRepository(_yulNameRepository)
-	{
-		//for (YulString n: _namesToFree)
-		//	m_nameDispenser.markUsed(n); //todo?
-	}
+		m_yulNameRepository(_yulNameRepository)
+	{}
 
 	using ASTModifier::operator();
 	void operator()(Identifier& _identifier) override;

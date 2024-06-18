@@ -67,9 +67,9 @@ YulStack::YulStack(
 	std::optional<uint8_t> _eofVersion,
 	solidity::yul::YulStack::Language _language,
 	solidity::frontend::OptimiserSettings _optimiserSettings,
-	const langutil::DebugInfoSelection& _debugInfoSelection
+	langutil::DebugInfoSelection const& _debugInfoSelection
 ):
-    m_yulNameRepository(std::make_shared<YulNameRepository>(languageToDialect(_language, _evmVersion))),
+	m_yulNameRepository(std::make_shared<YulNameRepository>(languageToDialect(_language, _evmVersion))),
 	m_language(_language),
 	m_evmVersion(_evmVersion),
 	m_eofVersion(_eofVersion),

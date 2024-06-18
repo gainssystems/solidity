@@ -110,7 +110,7 @@ void ConstantOptimiser::visit(Expression& _e)
 }
 
 RepresentationFinder::RepresentationFinder(YulNameRepository const& _yulNameRepository, EVMDialect const& _dialect, GasMeter const& _meter, langutil::DebugData::ConstPtr _debugData, std::map<u256, Representation>& _cache):
- 	m_dialect(_dialect),
+	m_dialect(_dialect),
 	m_yulNameRepository(_yulNameRepository),
 	m_meter(_meter),
 	m_debugData(std::move(_debugData)),

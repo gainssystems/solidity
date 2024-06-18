@@ -62,7 +62,7 @@ CodeTransform::CodeTransform(
 ):
 	m_assembly(_assembly),
 	m_info(_analysisInfo),
-    m_yulNameRepository(_yulNameRepository),
+	m_yulNameRepository(_yulNameRepository),
 	m_dialect(_dialect),
 	m_builtinContext(_builtinContext),
 	m_allowStackOpt(_allowStackOpt),

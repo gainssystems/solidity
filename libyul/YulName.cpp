@@ -44,7 +44,7 @@ YulNameRepository::YulNameRepository(solidity::yul::Dialect const& _dialect):
 {
 	defineName("");
 
-	for(auto const& type : _dialect.types)
+	for (auto const& type: _dialect.types)
 		if (type.empty())
 		{
 			m_indexBoundaries->beginTypes = 0;
@@ -60,7 +60,7 @@ YulNameRepository::YulNameRepository(solidity::yul::Dialect const& _dialect):
 
 	auto const& builtinNames = _dialect.builtinNames();
 	m_predefined.verbatim = defineName("@ verbatim");
-	for(auto const& label: builtinNames)
+	for (auto const& label: builtinNames)
 		if (!label.empty())
 		{
 			auto const name = defineName(label);
@@ -196,7 +196,7 @@ YulNameRepository::BuiltinFunction const* YulNameRepository::fetchTypedPredefine
 	auto const typeIndex = indexOfType(_type);
 	yulAssert(typeIndex < _functions.size());
 	auto const& functionName = _functions[typeIndex];
-	if(!functionName)
+	if (!functionName)
 		return nullptr;
 	return builtin(*functionName);
 }
@@ -257,9 +257,9 @@ YulNameRepository::BuiltinFunction YulNameRepository::convertBuiltinFunction(Yul
 	yulAssert(nameWithinBounds(_name), "YulName exceeds repository size, probably stems from another instance.");
 	BuiltinFunction result;
 	result.name = _name;
-	for (auto const& type : _builtin.parameters)
+	for (auto const& type: _builtin.parameters)
 		result.parameters.push_back(nameOfType(type));
-	for (auto const& type : _builtin.returns)
+	for (auto const& type: _builtin.returns)
 		result.returns.push_back(nameOfType(type));
 	result.data = &_builtin;
 	return result;
@@ -294,7 +294,7 @@ YulName YulNameRepository::nameOfType(std::string_view const _type) const
 {
 	if (!m_dialectTypes.empty())
 	{
-		for(auto const& m_dialectType : m_dialectTypes)
+		for (auto const& m_dialectType: m_dialectTypes)
 			if (std::get<1>(m_dialectType) == _type)
 				return std::get<0>(m_dialectType);
 		yulAssert(false, "only defined for (some) dialect types");
@@ -353,7 +353,7 @@ YulName YulNameRepository::defineName(std::string_view const _label)
 	}
 	else
 	{
-		if(auto const name = nameOfLabel(_label); name != emptyName())
+		if (auto const name = nameOfLabel(_label); name != emptyName())
 			return name;
 
 		m_definedLabels.emplace_back(_label);
@@ -384,13 +384,13 @@ void YulNameRepository::generateLabels(Block const& _ast, std::set<std::string> 
 	auto const names = NameCollector(_ast).names();
 
 	std::set<std::string> used (m_definedLabels.begin(), m_definedLabels.begin() + static_cast<std::ptrdiff_t>(m_indexBoundaries->endBuiltins));
-	for (auto const name : names)
+	for (auto const name: names)
 		if (!isDerivedName(name) || isVerbatimFunction(name))
 			used.emplace(labelOf(name));
 	std::vector<std::tuple<std::string, YulName>> generated;
 
 	auto namesIt = names.begin();
-	for(size_t name = m_indexBoundaries->endBuiltins; name < m_names.size(); ++name)
+	for (size_t name = m_indexBoundaries->endBuiltins; name < m_names.size(); ++name)
 	{
 		if (namesIt != names.end() && name == *namesIt)
 		{
@@ -403,7 +403,7 @@ void YulNameRepository::generateLabels(Block const& _ast, std::set<std::string> 
 				{
 					label = fmt::format(FMT_COMPILE("{}_{}"), baseLabel, bump++);
 				}
-				if(auto const existingDefinedName = nameOfLabel(label); existingDefinedName != emptyName() || name == emptyName())
+				if (auto const existingDefinedName = nameOfLabel(label); existingDefinedName != emptyName() || name == emptyName())
 					m_names[name] = m_names[existingDefinedName];
 				else
 					generated.emplace_back(label, name);
@@ -413,7 +413,7 @@ void YulNameRepository::generateLabels(Block const& _ast, std::set<std::string> 
 		}
 	}
 
-	for(auto const& [label, name] : generated)
+	for (auto const& [label, name] : generated)
 	{
 		m_definedLabels.emplace_back(label);
 		std::get<0>(m_names[name]) = m_definedLabels.size() - 1;
@@ -421,7 +421,7 @@ void YulNameRepository::generateLabels(Block const& _ast, std::set<std::string> 
 	}
 }
 
-YulNameRepository::YulNameRepository(const YulNameRepository& _rhs):
+YulNameRepository::YulNameRepository(YulNameRepository const& _rhs):
 	m_dialect(_rhs.m_dialect),
 	m_dialectTypes(_rhs.m_dialectTypes),
 	m_builtinFunctions(_rhs.m_builtinFunctions),

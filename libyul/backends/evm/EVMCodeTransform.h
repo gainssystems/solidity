@@ -89,7 +89,7 @@ public:
 		_analysisInfo,
 		_block,
 		_allowStackOpt,
-	    _yulNameRepository,
+		_yulNameRepository,
 		_dialect,
 		_builtinContext,
 		_identifierAccessCodeGen,

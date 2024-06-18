@@ -89,7 +89,7 @@ AsmAnalysisInfo AsmAnalyzer::analyzeStrictAssertCorrect(YulNameRepository const&
 	bool success = yul::AsmAnalyzer(
 		analysisInfo,
 		errors,
-	    _yulNameRepository,
+		_yulNameRepository,
 		{},
 		_object.qualifiedDataNames()
 	).analyze(*_object.code);

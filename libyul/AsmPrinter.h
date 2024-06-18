@@ -62,9 +62,9 @@ public:
 		langutil::CharStreamProvider const* _soliditySourceProvider = nullptr
 	):
 		m_nameRepository(_nameRepository),
-	    m_printingMode(_printingMode),
-	    m_debugInfoSelection(_debugInfoSelection),
-	    m_soliditySourceProvider(_soliditySourceProvider)
+		m_printingMode(_printingMode),
+		m_debugInfoSelection(_debugInfoSelection),
+		m_soliditySourceProvider(_soliditySourceProvider)
 	{
 		if (_sourceIndexToName)
 			for (auto&& [index, name]: *_sourceIndexToName)

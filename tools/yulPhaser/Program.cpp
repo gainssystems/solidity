@@ -60,7 +60,7 @@ std::ostream& operator<<(std::ostream& _stream, Program const& _program);
 
 Program::Program(Program const& program):
 	m_ast(std::make_unique<Block>(std::get<Block>(ASTCopier{}(*program.m_ast)))),
-    m_yulNameRepository(std::make_unique<YulNameRepository>(*program.m_yulNameRepository))
+	m_yulNameRepository(std::make_unique<YulNameRepository>(*program.m_yulNameRepository))
 {
 }
 

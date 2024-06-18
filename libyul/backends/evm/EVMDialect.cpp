@@ -533,8 +533,8 @@ EVMDialectTyped::EVMDialectTyped(langutil::EVMVersion _evmVersion, bool _objectA
 			1,
 			{},
 			{},
-			[](FunctionCall const&, AbstractAssembly&, BuiltinContext&) {}
- 		));
+			[](FunctionCall const&, AbstractAssembly&, BuiltinContext&) {})
+		);
 		m_functions[it->first].parameters = {boolType};
 		m_functions[it->first].returns = {defaultType};
 	}

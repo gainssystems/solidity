@@ -71,7 +71,7 @@ private:
 		Dialect const& _dialect
 	):
 		m_recursiveFunctions(std::move(_recursiveFunctions)),
-	    m_yulNameRepository(_yulNameRepository),
+		m_yulNameRepository(_yulNameRepository),
 		m_dialect(_dialect)
 	{}
 	/// Returns a vector of Expressions, where the index `i` is an expression if the function's

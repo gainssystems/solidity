@@ -152,7 +152,7 @@ public:
 	):
 		m_variablesToReplace(_variablesToReplace),
 		m_typeInfo(_typeInfo),
-	    m_yulNameRepository(_yulNameRepository)
+		m_yulNameRepository(_yulNameRepository)
 	{ }
 
 	void operator()(FunctionDefinition& _function) override;

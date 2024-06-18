@@ -133,7 +133,7 @@ public:
 	InlineModifier(FullInliner& _driver, YulName _functionName, YulNameRepository& _yulNameRepository, Dialect const& _dialect):
 		m_currentFunction(std::move(_functionName)),
 		m_driver(_driver),
-	    m_yulNameRepository(_yulNameRepository),
+		m_yulNameRepository(_yulNameRepository),
 		m_dialect(_dialect)
 	{ }
 
@@ -162,7 +162,7 @@ public:
 		YulNameRepository& _yulNameRepository
 	):
 		m_variableReplacements(std::move(_variableReplacements)),
-	    m_yulNameRepository(_yulNameRepository)
+		m_yulNameRepository(_yulNameRepository)
 	{}
 
 	using ASTCopier::operator ();
