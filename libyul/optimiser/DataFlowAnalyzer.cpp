@@ -448,7 +448,7 @@ std::optional<YulName> DataFlowAnalyzer::isSimpleLoad(
 		if (funCall->functionName.name == m_loadFunctionName[static_cast<unsigned>(_location)])
 			if (Identifier const* key = std::get_if<Identifier>(&funCall->arguments.front()))
 				return key->name;
-	return {};
+	return std::nullopt;
 }
 
 std::optional<std::pair<YulName, YulName>> DataFlowAnalyzer::isKeccak(Expression const& _expression) const

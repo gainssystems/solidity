@@ -70,7 +70,6 @@ YulStack::YulStack(
 	langutil::DebugInfoSelection const& _debugInfoSelection
 ):
 	m_yulNameRepository(std::make_shared<YulNameRepository>(languageToDialect(_language, _evmVersion))),
-	m_language(_language),
 	m_evmVersion(_evmVersion),
 	m_eofVersion(_eofVersion),
 	m_optimiserSettings(std::move(_optimiserSettings)),
